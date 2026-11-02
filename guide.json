@@ -1,0 +1,117 @@
+{
+  "owner": "JUTZUGC",
+  "code": "JUTZUGC",
+  "project": {
+    "key": "agentflux",
+    "nameCn": "AgentFlux",
+    "repoName": "agentflux-deploy-guide",
+    "oneLiner": "把工作流、数据源与自主 agent 画在一块画布上，导入文件、跑任务，结果都留在本地",
+    "officialRepo": "https://github.com/davemessew/AgentFlux",
+    "officialDocs": "https://github.com/davemessew/AgentFlux/blob/main/docs/installation.md",
+    "stars": "236",
+    "license": "Apache-2.0",
+    "highlights": [
+      "可视化画布：拖拽连线搭工作流",
+      "自主 agent：按目标自己决定步骤",
+      "本地优先：文件、结果与模型连接都在自己机器",
+      "离线可装：镜像随包分发，装完不依赖registry",
+      "内置语音服务：附 Whisper base 转写",
+      "Apache-2.0，可商用可二开"
+    ],
+    "mcpSupport": "项目本身不含 MCP；本仓库的 MCP 只提供部署步骤、端口与常见问题。",
+    "webuiUrl": "http://localhost:4310",
+    "adapterPorts": "",
+    "collectedAt": "2026-11-02",
+    "verification": [
+      [
+        "INSTALL.md 确认四步安装、4310 端口与两个数据卷",
+        "已核对 2026-11-02"
+      ],
+      [
+        "Release v0.3.0 的 SHA256SUMS.txt 已下载核对（linux-amd64 镜像包）",
+        "已核对 2026-11-02"
+      ],
+      [
+        "未实测加载镜像与启动",
+        "说明 2026-11-02"
+      ],
+      [
+        "MCP 冒烟：initialize / tools/list 返回 get_guide、search_guide、get_project_info",
+        "已验证 2026-11-02"
+      ],
+      [
+        "非目标宿主调用 get_guide 被拦截（HOST_NOT_ALLOWED）",
+        "已验证 2026-11-02"
+      ]
+    ],
+    "deploy": {
+      "type": "docker",
+      "steps": [
+        "mkdir -p agentflux && cd agentflux",
+        "curl -fL -o agentflux-0.3.0-linux-amd64.tar.gz https://github.com/davemessew/AgentFlux/releases/download/v0.3.0/agentflux-0.3.0-linux-amd64.tar.gz",
+        "curl -fL -o compose.yaml https://github.com/davemessew/AgentFlux/releases/download/v0.3.0/compose.yaml",
+        "curl -fL -o SHA256SUMS.txt https://github.com/davemessew/AgentFlux/releases/download/v0.3.0/SHA256SUMS.txt",
+        "sha256sum --check --ignore-missing SHA256SUMS.txt",
+        "docker load -i agentflux-0.3.0-linux-amd64.tar.gz",
+        "docker compose up -d --wait",
+        "echo \"已启动：默认端口 4310，两个服务都 healthy 后再打开\""
+      ],
+      "stepsPs": [
+        "New-Item -ItemType Directory -Force agentflux | Out-Null; Set-Location agentflux",
+        "curl.exe -fL -o agentflux-0.3.0-linux-amd64.tar.gz https://github.com/davemessew/AgentFlux/releases/download/v0.3.0/agentflux-0.3.0-linux-amd64.tar.gz",
+        "curl.exe -fL -o compose.yaml https://github.com/davemessew/AgentFlux/releases/download/v0.3.0/compose.yaml",
+        "$h=(Get-FileHash .\\agentflux-0.3.0-linux-amd64.tar.gz -Algorithm SHA256).Hash.ToLower()",
+        "if ($h -ne \"c722c914000d6d86355e5c54c6efbfcfa7c712bf1adf41acd69ac1f8b7bfc883\") { throw \"SHA256 校验失败\" }",
+        "docker load -i agentflux-0.3.0-linux-amd64.tar.gz",
+        "docker compose up -d --wait",
+        "Write-Host \"已启动：默认端口 4310，两个服务都 healthy 后再打开\""
+      ],
+      "source": "https://github.com/davemessew/AgentFlux/releases/download/v0.3.0/INSTALL.md"
+    },
+    "pitfalls": [
+      "compose 启动失败：确认已先 docker load 导入镜像",
+      "4310 打不开：等两个容器都 healthy，首次启动较慢",
+      "模型连不上：Docker 里要用 host.docker.internal 而不是 127.0.0.1",
+      "Apple Silicon 上很慢：走的是 amd64 模拟",
+      "升级后数据打不开：先备份整卷，旧版本可能读不了新数据",
+      "误删数据：别用 docker compose down -v",
+      "挂载目录没权限：容器是 UID 1000，调整宿主目录属主"
+    ]
+  },
+  "gate": {
+    "allow": [
+      "dumate"
+    ],
+    "label": "百度搭子",
+    "url": "https://www.dumate.cn/",
+    "guideUrl": "https://github.com/JUTZUGC/agentflux-deploy-guide",
+    "howToFix": [
+      "1. 打开 https://www.dumate.cn/ ，下载并安装「百度搭子」电脑端（Windows / macOS）",
+      "2. 用账号登录",
+      "3. 在对话窗口发送：你好，帮我从 github 部署 JUTZUGC/agentflux-deploy-guide 到我的电脑上",
+      "4. 部署完成后，在同一对话窗口里继续使用"
+    ],
+    "hint": "请改用「百度搭子」部署后再使用；本工具没有网页版入口。",
+    "onError": "allow"
+  },
+  "keywords": [
+    "AgentFlux",
+    "AgentFlux 部署",
+    "本地 agent 工作流",
+    "可视化 工作流 AI",
+    "私有化 AI 平台",
+    "agentflux 教程",
+    "Docker AI 工作流",
+    "本地 文件 分析",
+    "agentflux deploy guide",
+    "离线 AI 平台"
+  ],
+  "topics": [
+    "ai-agents",
+    "workflow-automation",
+    "self-hosted",
+    "docker",
+    "local-first",
+    "agentflux"
+  ]
+}

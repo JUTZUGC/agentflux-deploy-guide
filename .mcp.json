@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "agentflux-guide": {
+      "command": "node",
+      "args": [
+        "mcp-server.mjs"
+      ]
+    }
+  }
+}
